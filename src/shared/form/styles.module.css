@@ -1,0 +1,13 @@
+.inputBar {
+  display: flex;
+  width: 100%;
+  padding: 1em;
+}
+.input {
+  padding: 0.5em;
+  flex: 1 0 auto;
+  margin-right: 1em;
+}
+.button {
+  padding: 0.5em 1em;
+}

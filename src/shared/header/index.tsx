@@ -7,11 +7,3 @@ export default function Header() {
         </header>
     );
 }
-
-export function Footer() {
-    return (
-        <footer className={styles.footer}>
-            🍎🍊
-        </footer>
-    )
-}

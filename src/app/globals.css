@@ -44,7 +44,30 @@ a {
 
 .main-grid {
   display: grid;
-  grid-template-rows: 50px 100px 1fr 75px;
+  grid-template-rows: 50px 100px 1fr 100px;
   grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "header header"
+    "title title"
+    "left right"
+    "footer footer";
   height: 100vh;
+}
+
+.title {
+  grid-area: title;
+}
+.footer {
+  grid-area: footer;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+  padding: 6rem;
+  height: 100%;
+  grid-column-start: 1;
+  grid-column-end: span 2;
 }

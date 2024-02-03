@@ -20,7 +20,6 @@ export default function RootLayout({
       <body className={`${inter.className} main-grid`}>
         <Header />
         {children}
-        <Footer />
       </body>
     </html>
   );
