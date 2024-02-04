@@ -1,8 +1,8 @@
 'use client'
 
-import { askQuestion, ComparisonState } from "@/actions";
+import { askQuestion, ComparisonState, Conversation } from "@/actions";
 import { Topic } from "@/adapter";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import styles from "./styles.module.css";
 import inputStyles from '../form/styles.module.css';
 
@@ -11,40 +11,35 @@ const initialState: ComparisonState = {
     topicB: [],
     message: 'ready for questions',
 }
-// Opt out of caching for all data requests in the route segment
-export const dynamic = 'force-dynamic'
+
+function Output({ topic, answers }: { topic: string, answers: Conversation[] }) {
+    return (
+        <div className={styles.contents}>
+            {answers.length === 0 ? (
+                <div className={styles.empty}>
+                    I will answer your questions about {topic}
+                </div>
+            ) : (
+                <div className={styles.answers}>
+                    {answers.map(response => (
+                        <div key={response.question}>
+                            <p className={styles.question}>{response.question}</p>
+                            <p>{response.answer}</p>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    )
+}
 
 export default function CompareLayout({ topicA, topicB }: { topicA: Topic, topicB: Topic }) {
     const [state, formAction] = useFormState(askQuestion, initialState);
 
     return (
         <>
-            <div className={styles.contents}>
-                {state.topicA.length === 0 ? (
-                    <div className={styles.empty}>
-                        I will answer your question about {topicA.name}
-                    </div>
-                ) : (
-                    <div>
-                        {state.topicA.map(response => (
-                            <p key={response}>{response}</p>
-                        ))}
-                    </div>
-                )}
-            </div>
-            <div className={styles.contents}>
-                {state.topicB.length === 0 ? (
-                    <div className={styles.empty}>
-                        I will answer your question about {topicB.name}
-                    </div>
-                ) : (
-                    <div>
-                        {state.topicB.map(response => (
-                            <p key={response}>{response}</p>
-                        ))}
-                    </div>
-                )}
-            </div>
+            <Output topic={topicA.name} answers={state.topicA} />
+            <Output topic={topicB.name} answers={state.topicB} />
             <div className="footer">
                 <form action={formAction} className={inputStyles.inputBar}>
                     <input
@@ -52,12 +47,23 @@ export default function CompareLayout({ topicA, topicB }: { topicA: Topic, topic
                         name="query"
                         className={inputStyles.input}
                     />
-                    <input type="hidden" name="modelA" value={topicA.model} />
-                    <input type="hidden" name="modelB" value={topicB.model} />
-                    <input type="submit" value="Ask" className={inputStyles.button} />
+                    <input type="hidden" name="topicA" value={topicA.name} />
+                    <input type="hidden" name="topicB" value={topicB.name} />
+                    <SubmitButton />
                 </form >
-                <div>msg:{state?.message}</div>
             </div>
+            {state?.error && (
+                <div className={styles.error}>
+                    An error occurred: {state.error}
+                </div>
+            )}
         </>
     );
+}
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <input disabled={pending} type="submit" value={pending ? "Loading" : "Ask"} className={inputStyles.button} />
+    )
 }

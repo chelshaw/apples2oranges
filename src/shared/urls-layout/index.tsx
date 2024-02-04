@@ -1,7 +1,7 @@
 "use client";
 
 import { addUrl } from "@/actions";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import inputStyles from '../form/styles.module.css'
 import { useRouter } from "next/navigation";
 
@@ -19,13 +19,13 @@ export default function UrlsLayout({
 
     if (state?.success) {
         router.push(nextRoute)
-    } else {
-        console.log('no state sucess')
     }
 
     return (
         <>
-            <div className="content">{title}</div>
+            <div className="content">
+                {title}
+            </div>
             <div className="footer">
                 <form action={formAction} className={inputStyles.inputBar}>
                     <input
@@ -34,9 +34,16 @@ export default function UrlsLayout({
                         className={inputStyles.input}
                     />
                     <input type="hidden" name="topicId" value={topicId} />
-                    <input type="submit" value="Next" className={inputStyles.button} />
+                    <SubmitButton />
                 </form >
             </div>
         </>
     );
+}
+
+function SubmitButton() {
+    const { pending } = useFormStatus()
+    return (
+        <input disabled={pending} type="submit" value="Next" className={inputStyles.button} />
+    )
 }

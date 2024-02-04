@@ -35,7 +35,6 @@ export interface Topic {
 
 export const getTopic = async (id: string): Promise<Topic> => {
   const supabase = getSupabase();
-  console.log("getting topic", id);
   const { data, error } = await supabase
     .from("topics")
     .select()
@@ -54,7 +53,6 @@ export const getTopics = async (
   revalidatePath("/compare");
   const promises = [topicA, topicB].map((t) => getTopic(t));
   const results = await Promise.all(promises);
-  console.log({ results });
   return results;
 };
 

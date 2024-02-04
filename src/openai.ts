@@ -17,7 +17,7 @@ export async function initializeModel(topic: string, content: string) {
     messages: [
       {
         role: "system",
-        content: `You are a helpful expert in a topic called "${topic}". The following are contents about this topic: ${content}`,
+        content: `The following are contents about a topic called "${topic}": ${content}`,
       },
     ],
     model: "gpt-3.5-turbo",
@@ -27,18 +27,22 @@ export async function initializeModel(topic: string, content: string) {
 }
 
 export async function queryModel(
-  modelId: string,
+  topic: string,
   query: string
 ): Promise<OpenAI.Chat.ChatCompletion.Choice> {
   const openai = getOpenAi();
   const completion = await openai.chat.completions.create({
     messages: [
       {
+        role: "system",
+        content: `The question asked by the user is in reference to the topic "${topic}"`,
+      },
+      {
         role: "user",
         content: query,
       },
     ],
-    model: modelId,
+    model: "gpt-3.5-turbo",
   });
   console.log(completion.choices);
   return completion.choices[0];
