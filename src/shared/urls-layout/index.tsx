@@ -1,27 +1,41 @@
-import { InputBar } from "@/shared/form";
+"use client";
 
-export default function UrlsLayout({ onNext, title = 'Add URLs about your topic' }: { onNext: CallableFunction, title?: string }) {
-    // TODO: for allowing multiple URL sources
-    // const [urls, setUrls] = useState<string[]>([])
-    // const addUrl = useCallback((newValue: string) => {
-    //     const values = [...urls];
-    //     values.push(newValue);
-    //     setUrls(values);
-    // }, [urls, setUrls])
+import { addUrl } from "@/actions";
+import { useFormState } from "react-dom";
+import inputStyles from '../form/styles.module.css'
+import { useRouter } from "next/navigation";
 
-    // const removeUrl = useCallback((idx: number) => {
-    //     const values = [...urls];
-    //     values.splice(idx, 1);
-    //     setUrls(values);
-    // }, [urls, setUrls])
+export default function UrlsLayout({
+    nextRoute,
+    topicId,
+    title = "Add URLs about your topic",
+}: {
+    nextRoute: string;
+    topicId: number;
+    title?: string;
+}) {
+    const router = useRouter();
+    const [state, formAction] = useFormState(addUrl, null)
+
+    if (state?.success) {
+        router.push(nextRoute)
+    } else {
+        console.log('no state sucess')
+    }
 
     return (
         <>
-            <div className="content">
-                {title}
-            </div>
+            <div className="content">{title}</div>
             <div className="footer">
-                <InputBar onSubmit={onNext} />
+                <form action={formAction} className={inputStyles.inputBar}>
+                    <input
+                        type="text"
+                        name="url"
+                        className={inputStyles.input}
+                    />
+                    <input type="hidden" name="topicId" value={topicId} />
+                    <input type="submit" value="Next" className={inputStyles.button} />
+                </form >
             </div>
         </>
     );

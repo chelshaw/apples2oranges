@@ -16,6 +16,7 @@ export function InputBar({ onSubmit, buttonText = 'Add' }: { onSubmit: CallableF
             <input
                 type="text"
                 value={value}
+                name="text"
                 onChange={(e) => setValue(e.target.value)}
                 className={styles.input}
             />

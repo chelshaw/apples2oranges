@@ -1,0 +1,14 @@
+.contents {
+  display: flex;
+  height: 100%;
+  align-items: flex-end;
+}
+.empty {
+  color: rgba(var(--foreground-rgb), 0.7);
+  padding: 2em;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}

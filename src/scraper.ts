@@ -15,7 +15,7 @@ export async function scrapeContent(url: string): Promise<string> {
   try {
     const $ = cheerio.load(content);
     // TODO: This works for wikipedia -- how to make it generic?
-    const data = $(".content").text();
+    const data = $(".content p").text();
     return data;
   } catch (e) {
     throw new Error(`Unable to read content from ${url}`);

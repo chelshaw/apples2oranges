@@ -1,5 +1,7 @@
+"use server";
+
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
-import { scrapeContent } from "./scraper";
+import { revalidatePath } from "next/cache";
 
 let supabaseClient: SupabaseClient;
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -24,17 +26,47 @@ export async function createTopic(name: string) {
   return data[0];
 }
 
-export async function addUrls(topicId: string, url: string) {
+export interface Topic {
+  id: number;
+  name: string;
+  urls: string[];
+  model: string;
+}
+
+export const getTopic = async (id: string): Promise<Topic> => {
   const supabase = getSupabase();
-  const content = await scrapeContent(url);
-  console.log({ content });
-  // Create OpenAI topic with prompt including content
+  console.log("getting topic", id);
   const { data, error } = await supabase
     .from("topics")
-    .upsert({ id: topicId, urls: [url] })
-    .select();
+    .select()
+    .eq("id", parseInt(id));
   if (error) {
     throw new Error(error.message);
   }
-  return data[0];
+  console.log(data[0]);
+  return data[0] as Topic;
+};
+
+export const getTopics = async (
+  topicA: string,
+  topicB: string
+): Promise<Topic[]> => {
+  revalidatePath("/compare");
+  const promises = [topicA, topicB].map((t) => getTopic(t));
+  const results = await Promise.all(promises);
+  console.log({ results });
+  return results;
+};
+
+export async function updateTopic(topicId: string, updates: any) {
+  const supabase = getSupabase();
+  const { error } = await supabase
+    .from("topics")
+    .update(updates)
+    .eq("id", parseInt(topicId));
+  if (error) {
+    throw new Error(error.message);
+  }
+  revalidatePath("/compare");
+  return;
 }
