@@ -1,3 +1,5 @@
+'use client'
+
 import { InputBar } from "../form";
 
 export default function NameLayout({ onNext, title = 'Name your topic' }: { onNext: CallableFunction, title?: string }) {

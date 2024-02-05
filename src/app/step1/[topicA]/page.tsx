@@ -1,8 +1,8 @@
 "use server";
 
 import { getTopic } from "@/adapter";
+import { NavBar } from "@/shared/navbar";
 import UrlsLayout from "@/shared/urls-layout";
-import Link from "next/link";
 
 export default async function StepOneUrls({
     params,
@@ -13,9 +13,7 @@ export default async function StepOneUrls({
 
     return (
         <>
-            <div className="title">
-                <Link href="/step1">Back</Link>
-            </div>
+            <NavBar backLink="/step1" />
             <UrlsLayout topicId={id} nextRoute={`/step1/${params.topicA}/step2`} title={`Add URLs about ${name}`} />
         </>
     );
