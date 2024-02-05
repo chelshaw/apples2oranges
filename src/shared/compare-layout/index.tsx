@@ -9,7 +9,6 @@ import inputStyles from '../form/styles.module.css';
 const initialState: ComparisonState = {
     topicA: [],
     topicB: [],
-    message: 'ready for questions',
 }
 
 function Output({ topic, answers }: { topic: string, answers: Conversation[] }) {
