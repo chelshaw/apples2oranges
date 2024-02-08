@@ -6,12 +6,14 @@
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
+  --background-error: pink;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-rgb: 0, 0, 0;
+    --background-error: darkred;
   }
 }
 
@@ -68,6 +70,20 @@ a {
   align-items: center;
   padding: 6rem;
   height: 100%;
+  grid-column-start: 1;
+  grid-column-end: span 2;
+}
+.page-error {
+  background: var(--background-error);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+  padding: 6rem;
+  height: 100%;
+  grid-row-start: 2;
+  grid-row-end: span 3;
   grid-column-start: 1;
   grid-column-end: span 2;
 }

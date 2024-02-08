@@ -6,6 +6,7 @@ import { NavBar } from "@/shared/navbar";
 
 export default async function Compare({ params }: { params: { topicA: string, topicB: string } }) {
     const topics = await getTopics(params.topicA, params.topicB)
+
     return (
         <>
             <NavBar backLink={`/step1/${params.topicA}/step2/${params.topicB}`} />

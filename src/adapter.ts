@@ -43,6 +43,9 @@ export const getTopic = async (id: string): Promise<Topic> => {
     throw new Error(error.message);
   }
   console.log(data[0]);
+  if (!data[0]) {
+    throw new Error(`Topic with ID ${id} not found`);
+  }
   return data[0] as Topic;
 };
 
@@ -53,6 +56,7 @@ export const getTopics = async (
   revalidatePath("/compare");
   const promises = [topicA, topicB].map((t) => getTopic(t));
   const results = await Promise.all(promises);
+
   return results;
 };
 
